@@ -1,5 +1,6 @@
 import argparse
 from files.pdf_file_rename import rename_pdfs_in_directory
+from gui.ui_app import SearchListApp
 
 
 def main():
@@ -25,4 +26,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    SearchListApp().run()
