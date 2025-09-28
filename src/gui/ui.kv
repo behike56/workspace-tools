@@ -1,62 +1,53 @@
 #:kivy 2.3.0
 
-<SelectableLabel>:
-    size_hint_y: None
-    height: "40dp"
-    padding: 12, 0
-    canvas.before:
-        Color:
-            rgba: (0.2, 0.5, 0.9, 0.25) if self.selected else (0, 0, 0, 0)
-        Rectangle:
-            pos: self.pos
-            size: self.size
-
 <Root>:
     orientation: "vertical"
-    padding: 12
-    spacing: 10
+    padding: "16dp"
+    spacing: "12dp"
 
-    # ===== 検索バー =====
     BoxLayout:
         size_hint_y: None
-        height: "42dp"
-        spacing: 8
+        height: "40dp"
+        spacing: "8dp"
+        Label:
+            text: "ディレクトリ:"
+            font_name: "JP"
+            size_hint_x: None
+            width: "110dp"
         TextInput:
-            id: q
-            hint_text: "検索（例: fruit  or  vege  など）"
-            text: root.query
+            id: dir_input
+            text: root.dir_path
+            on_text: root.dir_path = self.text
             multiline: False
-            on_text: root.query = self.text  # 双方向バインド
-        Button:
-            text: "クリア"
-            on_release: root.clear_query()
-        Button:
-            text: "ソート切替"
-            on_release: root.toggle_sort()
+            font_name: "JP"
 
-    # ===== 一覧（RecycleView）=====
+    BoxLayout:
+        size_hint_y: None
+        height: "44dp"
+        spacing: "8dp"
+        Button:
+            text: "先頭に Amazon_ を付与"
+            on_release: root.run_prefix()
+            font_name: "JP"
+        Button:
+            text: "PDF→Amazon形式でリネーム"
+            on_release: root.run_pdf()
+            font_name: "JP"
+
+    Label:
+        text: root.status
+        size_hint_y: None
+        height: "28dp"
+        font_name: "JP"
+
+    # ← ここで data を書くなら子の前に置く。更新は Python 側でやる。
     RecycleView:
         id: rv
-        viewclass: "SelectableLabel"
-        scroll_type: ["bars", "content"]
-        bar_width: "6dp"
-        effect_cls: "ScrollEffect"
-
-        SelectableRecycleBoxLayout:
-            id: layout
-            default_size: None, dp(40)
+        viewclass: "Label"
+        data: []  # 初期値は空
+        RecycleBoxLayout:
+            default_size: None, dp(28)
             default_size_hint: 1, None
             size_hint_y: None
             height: self.minimum_height
             orientation: "vertical"
-            multiselect: False
-            touch_multiselect: False
-
-    # ===== ステータス =====
-    Label:
-        size_hint_y: None
-        height: "28dp"
-        text: root.status
-        halign: "left"
-        valign: "middle"
-        text_size: self.size
