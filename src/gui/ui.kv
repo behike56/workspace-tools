@@ -5,15 +5,16 @@
     padding: "16dp"
     spacing: "12dp"
 
+    # --- 既存: 単一ディレクトリ処理 ---
     BoxLayout:
         size_hint_y: None
         height: "40dp"
         spacing: "8dp"
         Label:
-            text: "ディレクトリ:"
+            text: "ディレクトリ(単体処理):"
             font_name: "JP"
             size_hint_x: None
-            width: "110dp"
+            width: "180dp"
         TextInput:
             id: dir_input
             text: root.dir_path
@@ -34,17 +35,79 @@
             on_release: root.run_pdf()
             font_name: "JP"
 
+    # --- 新規: ディレクトリ比較 ---
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        spacing: "8dp"
+        Label:
+            text: "A:"
+            font_name: "JP"
+            size_hint_x: None
+            width: "28dp"
+        TextInput:
+            id: dir_a
+            text: root.dir_a
+            on_text: root.dir_a = self.text
+            multiline: False
+            font_name: "JP"
+        Label:
+            text: "B:"
+            font_name: "JP"
+            size_hint_x: None
+            width: "28dp"
+        TextInput:
+            id: dir_b
+            text: root.dir_b
+            on_text: root.dir_b = self.text
+            multiline: False
+            font_name: "JP"
+        Button:
+            text: "同名ファイルを比較"
+            on_release: root.run_compare()
+            size_hint_x: None
+            width: "180dp"
+            font_name: "JP"
+
+    BoxLayout:
+        size_hint_y: None
+        height: "40dp"
+        spacing: "8dp"
+        Label:
+            text: "表示:"
+            font_name: "JP"
+            size_hint_x: None
+            width: "60dp"
+        Spinner:
+            text: "共通"
+            values: ["共通", "Aのみ", "Bのみ"]
+            font_name: "JP"
+            on_text:
+                root.compare_view = "common" if self.text == "共通" else ("only_a" if self.text == "Aのみ" else "only_b")
+
     Label:
         text: root.status
         size_hint_y: None
         height: "28dp"
         font_name: "JP"
 
-    # ← ここで data を書くなら子の前に置く。更新は Python 側でやる。
+    # 既存の結果（単体処理）
     RecycleView:
         id: rv
         viewclass: "Label"
-        data: []  # 初期値は空
+        data: []
+        RecycleBoxLayout:
+            default_size: None, dp(28)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: "vertical"
+
+    # 比較結果
+    RecycleView:
+        id: rv_compare
+        viewclass: "Label"
+        data: []
         RecycleBoxLayout:
             default_size: None, dp(28)
             default_size_hint: 1, None
