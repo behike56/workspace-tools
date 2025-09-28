@@ -10,7 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.core.text import LabelBase
-from kivy.properties import StringProperty, ListProperty, DictProperty
+from kivy.properties import DictProperty
 
 from files.pdf_file_rename import rename_pdfs_in_directory
 from files.file_rename import rename_files_with_prefix
